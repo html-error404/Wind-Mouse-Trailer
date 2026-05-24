@@ -3,6 +3,7 @@
 A lightweight, interactive cursor trail effect. Move your mouse to see particles follow.
 
 **Made with:** HTML, CSS, JavaScript
+
 <img width="1280" height="691" alt="ezgif-2503d149307e36e9" src="https://github.com/user-attachments/assets/90c779c4-7d98-4e2d-8c86-a8826053c927" />
 
 ---
