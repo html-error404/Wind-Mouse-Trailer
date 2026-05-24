@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wind // Mouse Trailer</title>
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+
+    <!-- Background overlay -->
+    <div class="stars-container">
+      <div class="space-star s1"></div>
+      <div class="space-star s2"></div>
+      <div class="space-star s3"></div>
+    </div>
+
+    <!-- Glowing Wind Trail -->
+    <canvas id="trailCanvas"></canvas>
+
+    <!-- HUD Header -->
+    <header class="hud-header">
+      <div class="brand-group">
+        <h1 class="hud-title">WIND</h1>
+        <span class="hud-subtitle">by <a href="https://github.com/html-error404" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.15s ease;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">html-error404</a></span>
+      </div>
+      <div class="hud-status-pill glass-panel">
+        <div class="status-indicator">
+          <div class="pulse-dot"></div>
+          <span class="status-text">ONLINE</span>
+        </div>
+        <div class="separator"></div>
+        <span id="fpsDisplay" class="fps-text">60.0 FPS</span>
+      </div>
+    </header>
+
+    <!-- Control panel -->
+    <div class="control-panel" id="controlPanel">
+
+      <!-- Header -->
+      <div class="panel-header" id="panelHeader">
+        <div class="panel-title-wrapper">
+          <svg class="panel-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span>TRAIL CONTROL</span>
+        </div>
+        <button class="toggle-btn" id="toggleBtn" title="Minimize / Maximize panel">
+          <svg class="chevron-icon" id="chevronIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Controls container -->
+      <div class="panel-body" id="panelBody">
+        
+        <!-- Color customization -->
+        <div class="settings-group">
+          <div class="group-header">
+            <span class="group-title">TRAIL COLOR</span>
+            <span class="group-hint">Select preset glowing color</span>
+          </div>
+          
+          <!-- Color palettes -->
+          <div class="color-presets-grid">
+            <button class="color-dot" data-color="#ffffff" style="background-color: #ffffff; --glow-color: rgba(255, 255, 255, 0.45)" title="Prism White"></button>
+            <button class="color-dot" data-color="#ff4e50" style="background-color: #ff4e50; --glow-color: rgba(255, 78, 80, 0.45)" title="Solar Flare"></button>
+            <button class="color-dot" data-color="#00ffff" style="background-color: #00ffff; --glow-color: rgba(0, 255, 255, 0.45)" title="Nebula Cyan"></button>
+            <button class="color-dot" data-color="#f992fd" style="background-color: #f992fd; --glow-color: rgba(249, 146, 253, 0.45)" title="Royal Orchid"></button>
+            <button class="color-dot" data-color="#39ff14" style="background-color: #39ff14; --glow-color: rgba(57, 255, 20, 0.45)" title="Quantum Lime"></button>
+            <button class="color-dot" data-color="#ffdf00" style="background-color: #ffdf00; --glow-color: rgba(255, 223, 0, 0.45)" title="Stardust Gold"></button>
+            <button class="color-dot active" data-color="rainbow" style="background: linear-gradient(135deg, #ff0055, #ffdd00, #00ffaa, #00aaff, #cc00ff); --glow-color: rgba(255, 255, 255, 0.6)" title="Cosmic Rainbow (Default)"></button>
+          </div>
+
+          <span style="font-size: 0.7rem; color: #e4e4e7; font-family: var(--font-display); font-weight: 600; display: block; margin-top: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;">ELEMENTS</span>
+          <div class="toggles-container" style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.35rem;">
+            <label class="toggle-switch-wrapper" style="display: flex; align-items: center; justify-content: space-between; padding: 0.45rem 0.65rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 10px; transition: all 0.25s; cursor: pointer;">
+              <span class="toggle-label" style="font-size: 0.72rem; font-weight: 500; color: rgba(255, 255, 255, 0.85); font-family: var(--font-sans);">Wind Trail</span>
+              <input type="checkbox" id="trailToggle" checked style="accent-color: rgb(var(--glow-rgb)); cursor: pointer; width: 14px; height: 14px;" />
+            </label>
+            <label class="toggle-switch-wrapper" style="display: flex; align-items: center; justify-content: space-between; padding: 0.45rem 0.65rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 10px; transition: all 0.25s; cursor: pointer;">
+              <span class="toggle-label" style="font-size: 0.72rem; font-weight: 500; color: rgba(255, 255, 255, 0.85); font-family: var(--font-sans);">Particle Sparks</span>
+              <input type="checkbox" id="particlesToggle" checked style="accent-color: rgb(var(--glow-rgb)); cursor: pointer; width: 14px; height: 14px;" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Shape customization -->
+        <div class="settings-group">
+          <div class="group-header">
+            <span class="group-title">PARTICLE SHAPE</span>
+            <span class="group-hint">Select celestial element geometry</span>
+          </div>
+          
+          <div class="shapes-grid">
+            <button class="shape-btn active" data-shape="star" title="Classic 5-pointed Star">
+              <div class="shape-preview-wrapper">
+                <svg viewBox="0 0 24 24" class="shape-svg" fill="currentColor">
+                  <path d="M12 3l3.5 7H23l-6 4.5 2.5 7-7-5-7 5 2.5-7-6-4.5h7.5L12 3z"/>
+                </svg>
+              </div>
+              <span class="shape-label">Classic Star</span>
+            </button>
+
+            <button class="shape-btn" data-shape="sparkle" title="Curved 4-pointed Sparkle">
+              <div class="shape-preview-wrapper">
+                <svg viewBox="0 0 24 24" class="shape-svg" fill="currentColor">
+                  <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4Z"/>
+                </svg>
+              </div>
+              <span class="shape-label">Sparkle</span>
+            </button>
+
+            <button class="shape-btn" data-shape="circle" title="Sleek Minimal Circle">
+              <div class="shape-preview-wrapper">
+                <svg viewBox="0 0 24 24" class="shape-svg" fill="currentColor">
+                  <circle cx="12" cy="12" r="8"/>
+                </svg>
+              </div>
+              <span class="shape-label">Circle</span>
+            </button>
+
+            <button class="shape-btn" data-shape="diamond" title="Ethereal Rotating Diamond">
+              <div class="shape-preview-wrapper">
+                <svg viewBox="0 0 24 24" class="shape-svg" fill="currentColor">
+                  <rect x="5" y="5" width="14" height="14" rx="2" transform="rotate(45 12 12)"/>
+                </svg>
+              </div>
+              <span class="shape-label">Diamond</span>
+            </button>
+
+            <button class="shape-btn" data-shape="heart" title="Lovely Astral Heart">
+              <div class="shape-preview-wrapper">
+                <svg viewBox="0 0 24 24" class="shape-svg" fill="currentColor">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </div>
+              <span class="shape-label">Heart</span>
+            </button>
+
+            <button class="shape-btn" data-shape="ring" title="Astral Ring Outliner">
+              <div class="shape-preview-wrapper">
+                <svg viewBox="0 0 24 24" class="shape-svg" fill="none" stroke="currentColor" stroke-width="3">
+                  <circle cx="12" cy="12" r="8"/>
+                </svg>
+              </div>
+              <span class="shape-label">Ring</span>
+            </button>
+
+            <button class="shape-btn" data-shape="moon" title="Mysterious Lunar Moon">
+              <div class="shape-preview-wrapper">
+                <svg viewBox="0 0 24 24" class="shape-svg" fill="currentColor">
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                </svg>
+              </div>
+              <span class="shape-label">Moon</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Trail settings -->
+        <div class="settings-group">
+          <div class="group-header">
+            <span class="group-title">TRAIL</span>
+            <span class="group-hint">Scale core size & density threshold</span>
+          </div>
+          <span style="font-size: 0.68rem; color: rgba(255, 255, 255, 0.45); font-family: var(--font-sans); display: block; margin-top: 0.55rem; text-transform: uppercase; letter-spacing: 0.05em;">TRAIL SCALE</span>
+          <div class="slider-container" style="display: flex; align-items: center; gap: 0.85rem; margin-top: 0.25rem;">
+            <input type="range" id="thicknessSlider" min="0.1" max="1.0" step="0.05" value="0.5" class="hud-slider" style="flex: 1;" />
+            <span id="thicknessValueText" class="font-mono text-xs" style="color: rgba(255, 255, 255, 0.85); min-width: 2.2rem; text-align: right;">0.50x</span>
+          </div>
+          <span style="font-size: 0.68rem; color: rgba(255, 255, 255, 0.45); font-family: var(--font-sans); display: block; margin-top: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Trail Opacity</span>
+          <div class="slider-container" style="display: flex; align-items: center; gap: 0.85rem; margin-top: 0.25rem;">
+            <input type="range" id="opacitySlider" min="0.1" max="1.0" step="0.05" value="1.0" class="hud-slider" style="flex: 1;" />
+            <span id="opacityValueText" class="font-mono text-xs" style="color: rgba(255, 255, 255, 0.85); min-width: 2.2rem; text-align: right;">100%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Style display -->
+      <div class="panel-footer" id="panelFooter">
+        <div class="footer-status-dot"></div>
+        <div class="footer-text-group">
+          <span class="footer-dynamic-desc" id="activeShapeText">Star</span>
+          <span class="footer-dynamic-color" id="activeColorText">Cosmic Rainbow</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script loading -->
+    <script src="./script.js"></script>
+  </body>
+</html>
